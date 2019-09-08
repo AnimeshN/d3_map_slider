@@ -15,7 +15,7 @@
         <p> census 2011</p>
     </div>
 
- <div id='map'></div>
+ <div id='info'></div>
  
   <div>
     <label for="nVel">
@@ -83,7 +83,7 @@
 
                         svg.selectAll("svg path").each(function(d) { 
                             this.style.opacity = d.properties.tot_p < goal ? 1 : 0;
-                            console.log(d.properties.tot_p); 
+                             
                         });
                     });
 
