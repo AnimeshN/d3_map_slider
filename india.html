@@ -6,8 +6,35 @@
         <script type="text/javascript" src="d3.v4.min.js"></script>
         <style type="text/css">
             /* No style rules here yet */       
+            path {
+                fill: #ccc;
+                stroke: #fff;
+                stroke-width: .5px;
+            }
+            path:hover {
+                fill: orange;
+            }
+            body {
+                text-align: center;
+            }
+            div.tooltip { 
+                position: absolute;     
+                text-align: center;     
+                width: 80px;          
+                height: 14px;         
+                padding: 2px;       
+                font: 12px sans-serif;    
+                background: #fff; 
+                border: 0px;        
+                pointer-events: none;     
+            }
         </style>
     </head>
+
+
+    
+
+
     <body>
 
     <div id="title">
@@ -37,6 +64,10 @@
 
             var svg = d3.select("body").append("svg")
                 .attr("width", width).attr("height", height)
+
+            var tooltip = d3.select("body").append("div") 
+            .attr("class", "tooltip")       
+            .style("opacity", 0);
 
             d3.json("d_palgarh.json", function(json) {
                 // create a first guess for the projection
@@ -70,9 +101,22 @@
 
                 svg.selectAll("path").data(json.features).enter().append("path")
                     .attr("d", path)
-                    .style("fill", " #e3ffd3")
-                    .style("stroke-width", "1")
-                    .style("stroke", "black")
+                    .on("mouseover", function(d) {    
+                        tooltip.transition()    
+                        .duration(200)    
+                        .style("opacity", .9);    
+                        tooltip.html(d.properties.area_name)  
+                        .style("left", (d3.event.pageX) + "px")   
+                        .style("top", (d3.event.pageY - 28) + "px");  
+                    })          
+                    .on("mouseout", function(d) {   
+                        tooltip.transition()    
+                        .duration(500)    
+                        .style("opacity", 0); 
+                    });
+                    // .style("fill", " #e3ffd3")
+                    // .style("stroke-width", "1")
+                    // .style("stroke", "black")
 
                
                 });
@@ -83,7 +127,6 @@
 
                         svg.selectAll("svg path").each(function(d) { 
                             this.style.opacity = d.properties.tot_p < goal ? 1 : 0;
-                            console.log(d.properties.tot_p); 
                         });
                     });
 
