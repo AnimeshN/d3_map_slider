@@ -47,7 +47,7 @@
   <div>
     <label for="nVel">
       Population = <span id="goal-value">10000</span>
-      <input style="width: 500px;" type="range" min="0" max="10000" id="goal" value="10000" step='100'>
+      <input style="width: 500px;" type="range" min="0" max="12000" id="goal" value="12000" step='100'>
     </label>
   </div>
 
@@ -59,7 +59,10 @@
             var height = 580;
             goal = 2000;
 
-
+            var colors = d3.scaleQuantize()
+                .domain([0,12000])
+                .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598", 
+                "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
             
 
             var svg = d3.select("body").append("svg")
@@ -101,6 +104,8 @@
 
                 svg.selectAll("path").data(json.features).enter().append("path")
                     .attr("d", path)
+                    .style("fill", function(d){ return colors(d.properties.tot_p);})
+                    
                     .on("mouseover", function(d) {    
                         tooltip.transition()    
                         .duration(200)    
@@ -114,7 +119,6 @@
                         .duration(500)    
                         .style("opacity", 0); 
                     });
-                    // .style("fill", " #e3ffd3")
                     // .style("stroke-width", "1")
                     // .style("stroke", "black")
 
